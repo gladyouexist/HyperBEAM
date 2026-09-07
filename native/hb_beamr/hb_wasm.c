@@ -490,9 +490,9 @@ int wasm_execute_indirect_function(Proc* proc, const char *field_name, const was
     /* ---------------- STACK SAVE -----------------*/
 
     // Attempt to call the function and check for any exceptions
-    if (!wasm_runtime_call_indirect(proc->exec_env, function_index, argc, argv)) {
-        if (wasm_runtime_get_exception(proc->exec_env)) {
-            DRV_DEBUG("%s", wasm_runtime_get_exception(proc->exec_env));
+    if (!wasm_runtime_call_indirect(proc->exec_env, function_index, argc, (uint32_t*)argv)) {
+        if (wasm_runtime_get_exception(wasm_runtime_get_module_inst(proc->exec_env))) {
+            DRV_DEBUG("%s", wasm_runtime_get_exception(wasm_runtime_get_module_inst(proc->exec_env)));
         }
         DRV_DEBUG("WASM function call failed");
         result = -1;
@@ -568,7 +568,7 @@ int wasm_execute_exported_function(Proc* proc, const char *function_name, wasm_v
     if (wasm_runtime_call_wasm_a(proc->exec_env, func->func_comm_rt, result_types->size, results, param_types->size, params)) {
         DRV_DEBUG("=   Function call successful");
     } else {
-        const char* exception = wasm_runtime_get_exception(proc->exec_env);
+        const char* exception = wasm_runtime_get_exception(wasm_runtime_get_module_inst(proc->exec_env));
         DRV_DEBUG("=   Function call failed: %s", exception);
         return -1;
     }
