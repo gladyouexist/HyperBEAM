@@ -1,4 +1,4 @@
 [tools]
-erlang = "latest"
-rebar = { version = "latest", asset_pattern = "rebar3" }
+erlang = "27.1"
+rebar = { version = "3.27.0", asset_pattern = "rebar3" }
 node = "22"
